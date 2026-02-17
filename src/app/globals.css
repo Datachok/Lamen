@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+/* ============================================
+   LIGHT THEME (default)
+   ============================================ */
+:root {
+  --clr-primary: #c1ff72;
+  --clr-secondary: #00bf63;
+  --clr-tertiary: #5ce1e6;
+  --clr-background: #fafafa;
+  --clr-surface: #ffffff;
+  --clr-surface-light: #e5e5e5;
+  --clr-text: #0a0a0a;
+  --clr-text-muted: #525252;
+  --clr-text-dim: #737373;
+  --clr-button-text: #0a0a0a;
+
+  --fp-opacity: 0.35;
+  --fp-glow-primary: rgba(77, 124, 15, 0.12);
+  --fp-glow-secondary: rgba(0, 191, 99, 0.06);
+  --fp-pulse: rgba(92, 225, 230, 0.03);
+}
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+  --clr-primary: #c1ff72;
+  --clr-secondary: #00bf63;
+  --clr-tertiary: #5ce1e6;
+  --clr-background: #0a0a0a;
+  --clr-surface: #111111;
+  --clr-surface-light: #1a1a1a;
+  --clr-text: #ffffff;
+  --clr-text-muted: #a3a3a3;
+  --clr-text-dim: #737373;
+  --clr-button-text: #0a0a0a;
+
+  --fp-opacity: 0.2;
+  --fp-glow-primary: rgba(193, 255, 114, 0.15);
+  --fp-glow-secondary: rgba(0, 191, 99, 0.08);
+  --fp-pulse: rgba(92, 225, 230, 0.04);
+}
+
+/* ============================================
+   TAILWIND v4 THEME — references CSS vars
+   ============================================ */
+@theme {
+  --color-primary: var(--clr-primary);
+  --color-secondary: var(--clr-secondary);
+  --color-tertiary: var(--clr-tertiary);
+  --color-background: var(--clr-background);
+  --color-surface: var(--clr-surface);
+  --color-surface-light: var(--clr-surface-light);
+  --color-text: var(--clr-text);
+  --color-text-muted: var(--clr-text-muted);
+  --color-text-dim: var(--clr-text-dim);
+  --color-button-text: var(--clr-button-text);
+
+  --font-sans: "Inter", "system-ui", sans-serif;
+}
+
+/* ============================================
+   SMOOTH THEME TRANSITIONS
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body,
+body * {
+  transition: background-color 0.4s ease, color 0.3s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Disable transitions on initial load to prevent FOUC */
+html.no-transitions,
+html.no-transitions * {
+  transition: none !important;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-light);
+  border-radius: 3px;
+}
