@@ -1,73 +1,47 @@
 "use client";
 
+import { useLocale } from "@/i18n/locale-context";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
-const features = [
-  {
-    title: "Sécurité renforcée",
-    description:
-      "Protocoles de chiffrement de pointe et authentification multi-facteurs pour protéger chaque vérification d'identité.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-      </svg>
-    ),
-  },
-  {
-    title: "Vérification instantanée",
-    description:
-      "Validez l'identité de vos utilisateurs en quelques secondes grâce à notre technologie de traitement en temps réel.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-      </svg>
-    ),
-  },
-  {
-    title: "Conformité réglementaire",
-    description:
-      "Entièrement conforme aux normes KYC/AML et aux exigences réglementaires nationales et internationales.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
-      </svg>
-    ),
-  },
+const featureIcons = [
+  <svg key="security" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+  </svg>,
+  <svg key="speed" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+  </svg>,
+  <svg key="compliance" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+  </svg>,
 ];
 
-const steps = [
-  {
-    number: "01",
-    title: "Soumission",
-    description: "L'utilisateur soumet ses documents d'identité via notre interface sécurisée.",
-  },
-  {
-    number: "02",
-    title: "Vérification",
-    description: "Notre système analyse et valide les informations en temps réel.",
-  },
-  {
-    number: "03",
-    title: "Validation",
-    description: "L'identité est confirmée et l'utilisateur peut procéder à ses opérations.",
-  },
-];
+const stepNumbers = ["01", "02", "03"];
 
 export default function AboutSection() {
+  const { t } = useLocale();
+
+  const features = t.about.features.map((f, i) => ({
+    ...f,
+    icon: featureIcons[i],
+  }));
+
+  const steps = t.about.steps.map((s, i) => ({
+    ...s,
+    number: stepNumbers[i],
+  }));
+
   return (
     <SectionWrapper id="about">
       {/* Section header */}
       <ScrollReveal>
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-            À propos de{" "}
-            <span className="text-primary">Lamen</span>
+            {t.about.title}
+            <span className="text-primary">{t.about.titleHighlight}</span>
           </h2>
           <p className="mt-4 text-text-muted max-w-2xl mx-auto text-lg">
-            Une solution de vérification d&apos;identité numérique conçue pour
-            sécuriser les transactions financières et simplifier les opérations
-            numériques.
+            {t.about.description}
           </p>
         </div>
       </ScrollReveal>
@@ -75,7 +49,7 @@ export default function AboutSection() {
       {/* Feature cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-24">
         {features.map((feature, i) => (
-          <ScrollReveal key={feature.title} delay={i * 0.15}>
+          <ScrollReveal key={i} delay={i * 0.15}>
             <div className="group rounded-2xl bg-surface border border-surface-light p-8 transition-colors hover:border-primary/30">
               <div className="text-primary mb-4">{feature.icon}</div>
               <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
@@ -91,7 +65,7 @@ export default function AboutSection() {
       <ScrollReveal>
         <div className="text-center mb-12">
           <h3 className="text-2xl md:text-3xl font-bold">
-            Comment ça marche
+            {t.about.howItWorks}
           </h3>
         </div>
       </ScrollReveal>

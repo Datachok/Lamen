@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "@/i18n/locale-context";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import Button from "@/components/ui/Button";
@@ -8,6 +9,7 @@ import { SITE_CONFIG } from "@/lib/constants";
 
 export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
+  const { t } = useLocale();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,11 +21,10 @@ export default function ContactSection() {
       <ScrollReveal>
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-            Contactez-<span className="text-primary">nous</span>
+            {t.contact.title}<span className="text-primary">{t.contact.titleHighlight}</span>
           </h2>
           <p className="mt-4 text-text-muted max-w-2xl mx-auto text-lg">
-            Une question, un projet ? N&apos;hésitez pas à nous écrire. Notre
-            équipe vous répondra dans les meilleurs délais.
+            {t.contact.description}
           </p>
         </div>
       </ScrollReveal>
@@ -34,9 +35,9 @@ export default function ContactSection() {
           {submitted ? (
             <div className="rounded-2xl bg-surface border border-primary/30 p-12 text-center">
               <div className="text-primary text-5xl mb-4">&#10003;</div>
-              <h3 className="text-2xl font-semibold mb-2">Message envoyé</h3>
+              <h3 className="text-2xl font-semibold mb-2">{t.contact.success.title}</h3>
               <p className="text-text-muted">
-                Merci pour votre message. Nous vous répondrons rapidement.
+                {t.contact.success.description}
               </p>
             </div>
           ) : (
@@ -50,14 +51,14 @@ export default function ContactSection() {
                     htmlFor="name"
                     className="block text-sm text-text-muted mb-2"
                   >
-                    Nom complet
+                    {t.contact.form.name}
                   </label>
                   <input
                     id="name"
                     type="text"
                     required
                     className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors"
-                    placeholder="Votre nom"
+                    placeholder={t.contact.form.namePlaceholder}
                   />
                 </div>
                 <div>
@@ -65,14 +66,14 @@ export default function ContactSection() {
                     htmlFor="email"
                     className="block text-sm text-text-muted mb-2"
                   >
-                    Email
+                    {t.contact.form.email}
                   </label>
                   <input
                     id="email"
                     type="email"
                     required
                     className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors"
-                    placeholder="votre@email.com"
+                    placeholder={t.contact.form.emailPlaceholder}
                   />
                 </div>
               </div>
@@ -82,14 +83,14 @@ export default function ContactSection() {
                   htmlFor="subject"
                   className="block text-sm text-text-muted mb-2"
                 >
-                  Sujet
+                  {t.contact.form.subject}
                 </label>
                 <input
                   id="subject"
                   type="text"
                   required
                   className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors"
-                  placeholder="Objet de votre message"
+                  placeholder={t.contact.form.subjectPlaceholder}
                 />
               </div>
 
@@ -98,19 +99,19 @@ export default function ContactSection() {
                   htmlFor="message"
                   className="block text-sm text-text-muted mb-2"
                 >
-                  Message
+                  {t.contact.form.message}
                 </label>
                 <textarea
                   id="message"
                   rows={5}
                   required
                   className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors resize-none"
-                  placeholder="Décrivez votre projet ou votre question..."
+                  placeholder={t.contact.form.messagePlaceholder}
                 />
               </div>
 
               <Button type="submit" size="lg" className="w-full sm:w-auto">
-                Envoyer le message
+                {t.contact.form.submit}
               </Button>
             </form>
           )}
@@ -120,7 +121,7 @@ export default function ContactSection() {
         <ScrollReveal delay={0.2} className="lg:col-span-2">
           <div className="space-y-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">Coordonnées</h3>
+              <h3 className="text-lg font-semibold mb-4">{t.contact.info.title}</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <svg
@@ -137,7 +138,7 @@ export default function ContactSection() {
                     />
                   </svg>
                   <div>
-                    <p className="text-sm text-text-muted">Email</p>
+                    <p className="text-sm text-text-muted">{t.contact.info.emailLabel}</p>
                     <p className="text-text">{SITE_CONFIG.contact.email}</p>
                   </div>
                 </div>
@@ -157,7 +158,7 @@ export default function ContactSection() {
                     />
                   </svg>
                   <div>
-                    <p className="text-sm text-text-muted">Téléphone</p>
+                    <p className="text-sm text-text-muted">{t.contact.info.phoneLabel}</p>
                     <p className="text-text">{SITE_CONFIG.contact.phone}</p>
                   </div>
                 </div>
@@ -165,13 +166,12 @@ export default function ContactSection() {
             </div>
 
             <div className="rounded-2xl bg-surface border border-surface-light p-6">
-              <h4 className="font-semibold mb-2">Prêt à sécuriser vos opérations ?</h4>
+              <h4 className="font-semibold mb-2">{t.contact.cta.title}</h4>
               <p className="text-sm text-text-muted mb-4">
-                Découvrez comment Lamen peut simplifier la vérification
-                d&apos;identité pour votre organisation.
+                {t.contact.cta.description}
               </p>
               <Button href="#hero" variant="outline" size="sm">
-                En savoir plus
+                {t.contact.cta.button}
               </Button>
             </div>
           </div>

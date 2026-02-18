@@ -2,13 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants";
+import { useLocale } from "@/i18n/locale-context";
 import Button from "@/components/ui/Button";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useLocale();
+
+  const navLinks = [
+    { label: t.nav.about, href: "#about" },
+    { label: t.nav.contact, href: "#contact" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -36,7 +44,7 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -45,9 +53,10 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <LanguageSwitcher />
           <ThemeToggle />
           <Button href="#contact" size="sm">
-            Nous contacter
+            {t.nav.cta}
           </Button>
         </div>
 
@@ -56,7 +65,7 @@ export default function Navbar() {
           type="button"
           className="md:hidden flex flex-col gap-1.5 p-2"
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Menu"
+          aria-label={t.nav.menuLabel}
         >
           <span
             className={`block w-5 h-0.5 bg-text transition-transform ${
@@ -86,7 +95,7 @@ export default function Navbar() {
             className="md:hidden bg-background/95 backdrop-blur-md border-b border-surface-light overflow-hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
@@ -97,9 +106,10 @@ export default function Navbar() {
                 </a>
               ))}
               <div className="flex items-center gap-4">
+                <LanguageSwitcher />
                 <ThemeToggle />
                 <Button href="#contact" size="sm" className="w-fit">
-                  Nous contacter
+                  {t.nav.cta}
                 </Button>
               </div>
             </div>
