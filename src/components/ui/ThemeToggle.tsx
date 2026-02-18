@@ -2,9 +2,11 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import { useTheme } from "@/lib/theme-context";
+import { useLocale } from "@/i18n/locale-context";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLocale();
   const isDark = theme === "dark";
 
   return (
@@ -17,7 +19,7 @@ export default function ThemeToggle() {
                  cursor-pointer"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
+      aria-label={isDark ? t.themeToggle.lightMode : t.themeToggle.darkMode}
     >
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
