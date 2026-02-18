@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
+import { useLocale } from "@/i18n/locale-context";
 import Button from "@/components/ui/Button";
 import FingerprintAnimation from "@/components/animations/FingerprintAnimation";
 import DashboardIllustration from "@/components/ui/DashboardIllustration";
@@ -22,6 +23,8 @@ const fadeUp: Variants = {
 };
 
 export default function HeroSection() {
+  const { t } = useLocale();
+
   return (
     <section
       id="hero"
@@ -47,9 +50,9 @@ export default function HeroSection() {
             variants={fadeUp}
             className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight"
           >
-            Votre identité numérique,{" "}
+            {t.hero.titleLine1}
             <span className="bg-gradient-to-r from-tertiary via-secondary to-primary bg-clip-text text-transparent">
-              vérifiée en un instant
+              {t.hero.titleHighlight}
             </span>
           </motion.h1>
 
@@ -57,23 +60,21 @@ export default function HeroSection() {
             variants={fadeUp}
             className="mt-6 text-lg md:text-xl text-text-muted max-w-xl leading-relaxed"
           >
-            Lamen sécurise vos transactions financières grâce à une vérification
-            d&apos;identité numérique rapide, fiable et conforme aux
-            réglementations en vigueur.
+            {t.hero.description}
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-10 flex items-center gap-4 flex-wrap">
             <Button href="#about" size="lg">
-              Découvrir Lamen
+              {t.hero.ctaPrimary}
             </Button>
             <Button href="#contact" variant="outline" size="lg">
-              Nous contacter
+              {t.hero.ctaSecondary}
             </Button>
           </motion.div>
         </motion.div>
 
-        {/* Right — dashboard illustration */}
-        <div className="hidden lg:block">
+        {/* Right — dashboard illustration (isolated from RTL) */}
+        <div className="hidden lg:block" dir="ltr">
           <DashboardIllustration />
         </div>
       </div>

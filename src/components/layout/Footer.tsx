@@ -1,11 +1,14 @@
-import { SITE_CONFIG } from "@/lib/constants";
+"use client";
 
-function AlgeriaFlag() {
+import { SITE_CONFIG } from "@/lib/constants";
+import { useLocale } from "@/i18n/locale-context";
+
+function AlgeriaFlag({ ariaLabel }: { ariaLabel: string }) {
   return (
     <svg
       viewBox="0 0 900 600"
       className="w-5 h-3.5 rounded-[2px] shrink-0"
-      aria-label="Drapeau de l'Algérie"
+      aria-label={ariaLabel}
     >
       {/* Green half */}
       <rect width="450" height="600" fill="#006233" />
@@ -29,6 +32,8 @@ function AlgeriaFlag() {
 }
 
 export default function Footer() {
+  const { t } = useLocale();
+
   return (
     <footer className="border-t border-surface-light">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -42,9 +47,9 @@ export default function Footer() {
           </span>
           <span className="text-surface-light">|</span>
           <span className="text-sm text-text-dim">
-            &copy; {new Date().getFullYear()} Tous droits réservés.
+            &copy; {new Date().getFullYear()} {t.footer.copyright}
           </span>
-          <AlgeriaFlag />
+          <AlgeriaFlag ariaLabel={t.footer.flagLabel} />
         </div>
 
         {/* Right — links */}
@@ -53,13 +58,13 @@ export default function Footer() {
             href="#"
             className="text-sm text-text-dim hover:text-text-muted transition-colors"
           >
-            Politique de confidentialité
+            {t.footer.privacy}
           </a>
           <a
             href="#"
             className="text-sm text-text-dim hover:text-text-muted transition-colors"
           >
-            Mentions légales
+            {t.footer.legal}
           </a>
         </div>
       </div>
