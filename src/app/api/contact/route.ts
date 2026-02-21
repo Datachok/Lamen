@@ -30,19 +30,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Step 1: Create a broadcast targeting the audience
-    const audienceId = "a883138f-ff78-4147-8c2a-12a4c9a6dd56";
+    // Create and send a broadcast to the segment (formerly audience)
+    const segmentId = "a883138f-ff78-4147-8c2a-12a4c9a6dd56";
     const fromEmail = process.env.RESEND_FROM_EMAIL || "contact@datachok.io";
 
-    console.log("[v0] Creating broadcast for audience:", audienceId);
+    console.log("[v0] Creating broadcast for segment:", segmentId);
     console.log("[v0] From:", fromEmail);
     console.log("[v0] API Key present:", !!process.env.RESEND_API_KEY);
 
     const broadcast = await resend.broadcasts.create({
-      audienceId,
+      segmentId,
       from: fromEmail,
       replyTo: email,
+      name: `Contact: ${name} - ${new Date().toISOString()}`,
       subject: `[Contact Lamen] ${subject}`,
+      send: true,
       html: `
         <!DOCTYPE html>
         <html>
@@ -142,31 +144,18 @@ export async function POST(request: Request) {
       `,
     });
 
-    console.log("[v0] Broadcast created:", broadcast);
+    console.log("[v0] Broadcast result:", broadcast);
 
     if (broadcast.error) {
-      console.error("[v0] Broadcast creation error:", broadcast.error);
+      console.error("[v0] Broadcast error:", broadcast.error);
       return NextResponse.json(
-        { error: "Erreur lors de la creation du broadcast." },
-        { status: 500 }
-      );
-    }
-
-    // Step 2: Send the broadcast
-    const sendResult = await resend.broadcasts.send(broadcast.data!.id);
-
-    console.log("[v0] Broadcast sent:", sendResult);
-
-    if (sendResult.error) {
-      console.error("[v0] Broadcast send error:", sendResult.error);
-      return NextResponse.json(
-        { error: "Erreur lors de l'envoi du broadcast." },
+        { error: `Erreur Resend: ${broadcast.error.message}` },
         { status: 500 }
       );
     }
 
     return NextResponse.json(
-      { success: true, data: sendResult.data },
+      { success: true, data: broadcast.data },
       { status: 200 }
     );
   } catch (error) {
