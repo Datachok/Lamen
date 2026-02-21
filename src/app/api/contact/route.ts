@@ -5,11 +5,15 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
+    console.log("[v0] Contact API called");
     const body = await request.json();
     const { name, email, subject, message } = body;
 
+    console.log("[v0] Received data:", { name, email, subject });
+
     // Validation
     if (!name || !email || !subject || !message) {
+      console.log("[v0] Validation failed: missing fields");
       return NextResponse.json(
         { error: "Tous les champs sont requis" },
         { status: 400 }
@@ -19,6 +23,7 @@ export async function POST(request: Request) {
     // Email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      console.log("[v0] Validation failed: invalid email");
       return NextResponse.json(
         { error: "Email invalide" },
         { status: 400 }
@@ -31,6 +36,10 @@ export async function POST(request: Request) {
       "djemililena@gmail.com",
       "sarahdjem212@gmail.com",
     ];
+
+    console.log("[v0] Sending email to:", recipients);
+    console.log("[v0] From:", process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev");
+    console.log("[v0] API Key present:", !!process.env.RESEND_API_KEY);
 
     const data = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
@@ -136,12 +145,15 @@ export async function POST(request: Request) {
       `,
     });
 
+    console.log("[v0] Email sent successfully:", data);
+
     return NextResponse.json(
       { success: true, data },
       { status: 200 }
     );
   } catch (error) {
     console.error("[v0] Error sending email:", error);
+    console.error("[v0] Error details:", JSON.stringify(error, null, 2));
     return NextResponse.json(
       { error: "Erreur lors de l'envoi du message. Veuillez réessayer." },
       { status: 500 }
