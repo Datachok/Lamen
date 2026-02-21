@@ -25,10 +25,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send email using Resend
+    // Send email using Resend to multiple recipients
+    const recipients = [
+      "lbenboudiaf@gmail.com",
+      "djemililena@gmail.com",
+      "sarahdjem212@gmail.com",
+    ];
+
     const data = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
-      to: process.env.CONTACT_EMAIL || "contact@lamen.fr",
+      to: recipients,
       replyTo: email,
       subject: `[Contact Lamen] ${subject}`,
       html: `
