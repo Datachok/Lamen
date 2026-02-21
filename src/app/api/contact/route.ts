@@ -30,17 +30,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Note: onboarding@resend.dev can only send to the account owner's email
-    // To send to multiple recipients, verify a custom domain in Resend
-    const recipient = "lbenboudiaf@gmail.com";
+    // Send to Resend audience (multiple recipients)
+    const audienceId = "a883138f-ff78-4147-8c2a-12a4c9a6dd56";
 
-    console.log("[v0] Sending email to:", recipient);
-    console.log("[v0] From:", process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev");
+    console.log("[v0] Sending email to audience:", audienceId);
+    console.log("[v0] From:", process.env.RESEND_FROM_EMAIL || "contact@datachok.io");
     console.log("[v0] API Key present:", !!process.env.RESEND_API_KEY);
 
     const data = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
-      to: recipient,
+      from: process.env.RESEND_FROM_EMAIL || "contact@datachok.io",
+      to: audienceId,
       replyTo: email,
       subject: `[Contact Lamen] ${subject}`,
       html: `
