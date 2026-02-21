@@ -30,16 +30,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send to Resend audience (multiple recipients)
+    // Step 1: Create a broadcast targeting the audience
     const audienceId = "a883138f-ff78-4147-8c2a-12a4c9a6dd56";
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "contact@datachok.io";
 
-    console.log("[v0] Sending email to audience:", audienceId);
-    console.log("[v0] From:", process.env.RESEND_FROM_EMAIL || "contact@datachok.io");
+    console.log("[v0] Creating broadcast for audience:", audienceId);
+    console.log("[v0] From:", fromEmail);
     console.log("[v0] API Key present:", !!process.env.RESEND_API_KEY);
 
-    const data = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "contact@datachok.io",
-      to: audienceId,
+    const broadcast = await resend.broadcasts.create({
+      audienceId,
+      from: fromEmail,
       replyTo: email,
       subject: `[Contact Lamen] ${subject}`,
       html: `
@@ -141,10 +142,31 @@ export async function POST(request: Request) {
       `,
     });
 
-    console.log("[v0] Email sent successfully:", data);
+    console.log("[v0] Broadcast created:", broadcast);
+
+    if (broadcast.error) {
+      console.error("[v0] Broadcast creation error:", broadcast.error);
+      return NextResponse.json(
+        { error: "Erreur lors de la creation du broadcast." },
+        { status: 500 }
+      );
+    }
+
+    // Step 2: Send the broadcast
+    const sendResult = await resend.broadcasts.send(broadcast.data!.id);
+
+    console.log("[v0] Broadcast sent:", sendResult);
+
+    if (sendResult.error) {
+      console.error("[v0] Broadcast send error:", sendResult.error);
+      return NextResponse.json(
+        { error: "Erreur lors de l'envoi du broadcast." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
-      { success: true, data },
+      { success: true, data: sendResult.data },
       { status: 200 }
     );
   } catch (error) {
