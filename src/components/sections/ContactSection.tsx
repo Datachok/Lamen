@@ -9,11 +9,49 @@ import { SITE_CONFIG } from "@/lib/constants";
 
 export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { t } = useLocale();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Erreur lors de l'envoi");
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("[v0] Contact form error:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Une erreur est survenue. Veuillez réessayer."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,6 +83,12 @@ export default function ContactSection() {
               onSubmit={handleSubmit}
               className="rounded-2xl bg-surface border border-surface-light p-8 md:p-10 space-y-6"
             >
+              {error && (
+                <div className="rounded-xl bg-red-500/10 border border-red-500/30 p-4 text-red-500 text-sm">
+                  {error}
+                </div>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label
@@ -55,9 +99,11 @@ export default function ContactSection() {
                   </label>
                   <input
                     id="name"
+                    name="name"
                     type="text"
                     required
-                    className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors"
+                    disabled={loading}
+                    className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder={t.contact.form.namePlaceholder}
                   />
                 </div>
@@ -70,9 +116,11 @@ export default function ContactSection() {
                   </label>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     required
-                    className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors"
+                    disabled={loading}
+                    className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder={t.contact.form.emailPlaceholder}
                   />
                 </div>
@@ -87,9 +135,11 @@ export default function ContactSection() {
                 </label>
                 <input
                   id="subject"
+                  name="subject"
                   type="text"
                   required
-                  className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors"
+                  disabled={loading}
+                  className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder={t.contact.form.subjectPlaceholder}
                 />
               </div>
@@ -103,15 +153,22 @@ export default function ContactSection() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={5}
                   required
-                  className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors resize-none"
+                  disabled={loading}
+                  className="w-full bg-background border border-surface-light rounded-xl px-4 py-3 text-text placeholder:text-text-dim focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder={t.contact.form.messagePlaceholder}
                 />
               </div>
 
-              <Button type="submit" size="lg" className="w-full sm:w-auto">
-                {t.contact.form.submit}
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full sm:w-auto"
+                disabled={loading}
+              >
+                {loading ? "Envoi en cours..." : t.contact.form.submit}
               </Button>
             </form>
           )}
