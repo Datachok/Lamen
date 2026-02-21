@@ -30,20 +30,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send email using Resend to multiple recipients
-    const recipients = [
-      "lbenboudiaf@gmail.com",
-      "djemililena@gmail.com",
-      "sarahdjem212@gmail.com",
-    ];
+    // Note: onboarding@resend.dev can only send to the account owner's email
+    // To send to multiple recipients, verify a custom domain in Resend
+    const recipient = "lbenboudiaf@gmail.com";
 
-    console.log("[v0] Sending email to:", recipients);
+    console.log("[v0] Sending email to:", recipient);
     console.log("[v0] From:", process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev");
     console.log("[v0] API Key present:", !!process.env.RESEND_API_KEY);
 
     const data = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
-      to: recipients,
+      to: recipient,
       replyTo: email,
       subject: `[Contact Lamen] ${subject}`,
       html: `
