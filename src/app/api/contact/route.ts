@@ -30,14 +30,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create and send a broadcast to the segment (formerly audience)
     const audienceId = "a883138f-ff78-4147-8c2a-12a4c9a6dd56";
     const fromEmail = process.env.RESEND_FROM_EMAIL || "contact@datachok.io";
 
-    console.log("[v0] Creating broadcast for segment:", audienceId);
+    console.log("[v0] Creating broadcast for audience:", audienceId);
     console.log("[v0] From:", fromEmail);
     console.log("[v0] API Key present:", !!process.env.RESEND_API_KEY);
 
+    // 1. Créer le broadcast
     const broadcast = await resend.broadcasts.create({
       audienceId,
       from: fromEmail,
@@ -143,7 +143,7 @@ export async function POST(request: Request) {
       `,
     });
 
-    console.log("[v0] Broadcast result:", broadcast);
+    console.log("[v0] Broadcast created:", broadcast);
 
     if (broadcast.error) {
       console.error("[v0] Broadcast error:", broadcast.error);
@@ -153,8 +153,21 @@ export async function POST(request: Request) {
       );
     }
 
+    // 2. Envoyer immédiatement
+    const sent = await resend.broadcasts.send(broadcast.data!.id);
+
+    console.log("[v0] Broadcast sent:", sent);
+
+    if (sent.error) {
+      console.error("[v0] Send error:", sent.error);
+      return NextResponse.json(
+        { error: `Erreur envoi: ${sent.error.message}` },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { success: true, data: broadcast.data },
+      { success: true, data: sent.data },
       { status: 200 }
     );
   } catch (error) {
