@@ -31,20 +31,19 @@ export async function POST(request: Request) {
     }
 
     // Create and send a broadcast to the segment (formerly audience)
-    const segmentId = "a883138f-ff78-4147-8c2a-12a4c9a6dd56";
+    const audienceId = "a883138f-ff78-4147-8c2a-12a4c9a6dd56";
     const fromEmail = process.env.RESEND_FROM_EMAIL || "contact@datachok.io";
 
-    console.log("[v0] Creating broadcast for segment:", segmentId);
+    console.log("[v0] Creating broadcast for segment:", audienceId);
     console.log("[v0] From:", fromEmail);
     console.log("[v0] API Key present:", !!process.env.RESEND_API_KEY);
 
     const broadcast = await resend.broadcasts.create({
-      segmentId,
+      audienceId,
       from: fromEmail,
       replyTo: email,
       name: `Contact: ${name} - ${new Date().toISOString()}`,
       subject: `[Contact Lamen] ${subject}`,
-      send: true,
       html: `
         <!DOCTYPE html>
         <html>
