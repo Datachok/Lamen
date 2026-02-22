@@ -10,6 +10,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: "button" | "submit";
   className?: string;
+  disabled?: boolean;
 }
 
 const sizeClasses = {
@@ -33,8 +34,9 @@ export default function Button({
   onClick,
   type = "button",
   className = "",
+  disabled = false,
 }: ButtonProps) {
-  const classes = `inline-flex items-center justify-center rounded-full transition-colors ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+  const classes = `inline-flex items-center justify-center rounded-full transition-colors ${variantClasses[variant]} ${sizeClasses[size]} ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className}`;
 
   if (href) {
     return (
@@ -53,9 +55,10 @@ export default function Button({
     <motion.button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={classes}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={disabled ? {} : { scale: 1.03 }}
+      whileTap={disabled ? {} : { scale: 0.97 }}
     >
       {children}
     </motion.button>
